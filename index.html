@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/img/tambor.png" type="image/x-icon">
+    <title>Basic Drum Kit</title>
+
+    <style>
+        body {
+            height: 100vh;
+            margin: 0;
+            background-image: url(/img/background-image.jpg);
+        }
+
+        #keys {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2em;
+            width: 100vw;
+            height: 100vh;
+
+        }
+
+        button {
+            border: none;
+            width: 4rem;
+            height: 4rem;
+            border-radius: 0.5rem;
+            background-color: #472c0d;
+            color: #EFEEEA;
+            font-size: large;
+        }
+
+        .button-text {
+            text-align: center;
+            margin: 0.2rem 0 0 0;
+            background-color: black;
+            color: #EFEEEA;
+            border-radius: 10px;
+        }
+
+        .playing {
+            border: 1px solid yellow;
+            transform: scale(1.2);
+            transition: transform .1s ease-in-out;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="keys">
+        <button data-key="65">A</button>
+        <button data-key="83">S</button>
+        <button data-key="68">D</button>
+        <button data-key="70">F</button>
+        <button data-key="71">G</button>
+        <button data-key="72">H</button>
+        <button data-key="74">J</button>
+        <button data-key="75">K</button>
+        <button data-key="76">L</button>
+
+        <audio data-key="65" src="/sounds/tom-1.wav"></audio>
+        <audio data-key="83" src="/sounds/tom-2.wav"></audio>
+        <audio data-key="68" src="/sounds/floor-tom.wav"></audio>
+        <audio data-key="70" src="/sounds/bass.wav"></audio>
+        <audio data-key="71" src="/sounds/snare.wav"></audio>
+        <audio data-key="72" src="/sounds/closed-hi-hat.wav"></audio>
+        <audio data-key="74" src="/sounds/open-hi-hat.wav"></audio>
+        <audio data-key="75" src="/sounds/crash-cymbal.wav"></audio>
+        <audio data-key="76" src="/sounds/crash-cymbal2.wav"></audio>
+
+
+    </div>
+
+    <script>
+
+        function playSound(e) {
+            const audioFiles = document.querySelectorAll("audio");
+            audioFiles.forEach(audio => {
+                if (Number(audio.dataset.key) === e.keyCode) {
+                    audio.currentTime = 0;
+                    audio.play();
+                }
+            });
+
+
+        }
+
+        function updateUI(e) {
+            const buttons = document.querySelectorAll("button");
+            buttons.forEach(button => {
+                if (Number(button.dataset.key) === e.keyCode) {
+                    button.classList.add("playing");
+                }
+            });
+
+        }
+
+        function removeUI(e) {
+            e.target.classList.remove("playing")
+        }
+
+        const buttons = document.querySelectorAll("button");
+        buttons.forEach(button => {
+            button.addEventListener("transitionend", removeUI);
+        });
+
+        window.addEventListener("keydown", (e) => {
+            playSound(e);
+            updateUI(e);
+        });
+
+    </script>
+</body>
+
+</html>
